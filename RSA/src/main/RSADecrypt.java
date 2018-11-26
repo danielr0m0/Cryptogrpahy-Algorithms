@@ -78,7 +78,6 @@ public class RSADecrypt {
                 text+= convert(Integer.parseInt(m.substring(j,j+2)));
             }
         }
-        System.out.println(text);
         return text;
     }
 
