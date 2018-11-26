@@ -3,7 +3,6 @@ package main;
 import java.io.File;
 import java.io.PrintWriter;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class RSAEncrypt {
@@ -37,20 +36,6 @@ public class RSAEncrypt {
                     n = new BigInteger(parsed[2]);
                 }
             }
-            String w ="Whe";
-            BigInteger m = BigInteger.valueOf(230805);
-            BigInteger c = m.pow(e.intValue()).mod(n);
-            System.out.println();
-            System.out.println(c);
-            System.out.println(".........");
-            System.out.println();
-            BigInteger d = BigInteger.valueOf(60365);
-            BigInteger r= c.pow(d.intValue()).mod(n);
-            System.out.println(r);
-            System.out.println(".........");
-            System.out.println();
-            System.out.println(m);
-            System.out.println(".........");
 
 
             //write to file
@@ -78,41 +63,30 @@ public class RSAEncrypt {
     //text is in 3 blocks so 6 characters in each block
     //needs padding at the end 00-31
     public static String encrypt(String text, BigInteger e, BigInteger n) throws Exception{
+        int sizeOfCipher= (""+n).length();
+
         for (int i = 0; i < text.length()%3; i++) {
             text+=" ";
         }
-        ArrayList<BigInteger> list = new ArrayList<>();
 
         text = text.toUpperCase();
         String cipher = "";
         for (int i = 0; i < text.length(); i+=3) {
-            String block = ""+convert(text.charAt(i))+""+convert(text.charAt(i+1))+""+convert(text.charAt(i+2));
+            String block = convert(text.charAt(i))+convert(text.charAt(i+1))+convert(text.charAt(i+2));
             BigInteger m =  BigInteger.valueOf((long)Integer.parseInt(block));
             //this is crypted message
             BigInteger cm = m.pow(e.intValue()).mod(n);
-            list.add(cm);
             String c = ""+cm;
             //add leading 0 to string
-            if(c.length()!=6){
+            if(c.length()!=sizeOfCipher){
                 String padding="";
-                for (int j = 0; j < 6-c.length(); j++) {
+                for (int j = 0; j < sizeOfCipher-c.length(); j++) {
                     padding+="0";
                 }
                 c= padding+c;
             }
             cipher+=c;
         }
-
-        BigInteger min = list.get(0);
-        for(int i = 0; i < list.size(); i++)
-        {
-            if(min.compareTo(list.get(i))<0)
-            {
-                min = list.get(i);
-            }
-        }
-
-        System.out.println(min);
 
         return cipher;
     }

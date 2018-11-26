@@ -62,9 +62,9 @@ public class RSADecrypt {
 
     private static String decrypt(String message, BigInteger d, BigInteger n) throws Exception {
         String text ="";
-
-        for (int i = 0; i < message.length(); i+=6) {
-            BigInteger c = new BigInteger(message.substring(i,i+6));
+        int sizeOfCipher= (""+n).length();
+        for (int i = 0; i < message.length(); i+=sizeOfCipher) {
+            BigInteger c = new BigInteger(message.substring(i,i+sizeOfCipher));
             String m= ""+c.pow(d.intValue()).mod(n);
             String zero="";
             for (int j = 0; j < 6-m.length(); j++) {
@@ -75,10 +75,10 @@ public class RSADecrypt {
 
 
             for (int j = 0; j < m.length(); j+=2) {
-
                 text+= convert(Integer.parseInt(m.substring(j,j+2)));
             }
         }
+        System.out.println(text);
         return text;
     }
 
